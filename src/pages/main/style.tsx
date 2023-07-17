@@ -8,6 +8,6 @@ export const PageWrapper = styled.div(() => [
 
 export const MainPageContainer = styled.div(() => [
   tw`
-    w-4/5 h-4/5 mx-auto my-0 relative px-10 bg-slate-400
+    w-4/5 h-4/5 mx-auto my-0 relative px-10 
     `,
 ]);
