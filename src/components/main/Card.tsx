@@ -1,5 +1,7 @@
+import { UserScrap, UserScrapProps } from "@/store/atoms";
 import Image from "next/image";
 import React from "react";
+import { useRecoilState } from "recoil";
 import tw, { css, styled } from "twin.macro";
 
 type Props = {
@@ -7,7 +9,7 @@ type Props = {
   postIdx: number;
   title: string;
   secondaryText: string;
-  scrap: boolean;
+  scrap: Array<number>;
   imgsrc: string;
 };
 
@@ -17,7 +19,7 @@ const CardWrapper = styled.button(() => [
     width: 25%;
     height: 40%;
     grid-auto-columns: repeat(auto-fill, minmax(30%, auto));
-    text-align: start;
+    /* text-align: start; */
   `,
 ]);
 
@@ -54,10 +56,26 @@ const Card = ({
   scrap,
   imgsrc,
 }: Props) => {
-  if (scrap === true) {
+  const [scrapNum, setScrapNum] = useRecoilState<UserScrapProps[]>(UserScrap);
+  const onClick = () => {
+    const updatedScrapArray = scrapNum[0].scrapArray.includes(postIdx)
+      ? scrapNum[0].scrapArray.filter((idx) => idx !== postIdx)
+      : [...scrapNum[0].scrapArray, postIdx];
+
+    setScrapNum((prev) => [
+      {
+        ...prev[0],
+        scrapArray: updatedScrapArray,
+      },
+    ]);
+
+    console.log(scrapNum);
+  };
+
+  if (scrap.includes(postIdx)) {
     return (
       <CardWrapper>
-        <Star>
+        <Star onClick={onClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="yellow"
@@ -87,7 +105,7 @@ const Card = ({
   } else {
     return (
       <CardWrapper>
-        <Star>
+        <Star onClick={onClick}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

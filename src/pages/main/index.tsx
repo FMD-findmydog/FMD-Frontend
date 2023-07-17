@@ -1,9 +1,9 @@
 import Toggle from "@/components/main/Toggle";
 import Title from "@/components/utils/Title";
-import { missingCount } from "@/store/atoms";
+import { MissingDogsCard, UserScrap, missingCount } from "@/store/atoms";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { MainPageContainer, PageWrapper } from "./style";
 import Card from "@/components/main/Card";
 
@@ -11,7 +11,7 @@ import Card from "@/components/main/Card";
 //fetch하는 방식!
 //수정이 전체적으로 필요한 부분!!
 
-interface CardInfoProps {
+export interface CardInfoProps {
   userIdx: number;
   postIdx: number;
   title: string;
@@ -71,18 +71,21 @@ function Page() {
       imgsrc: "/testImg/image1.jpeg",
     },
   ];
-  const newCardInfo: CardInfoProps[] = [];
+  const [CardList, setCardList] = useRecoilState(MissingDogsCard);
+  const scrapNum = useRecoilValue(UserScrap);
   const newCardInfoPush = async () => {
+    const newScrapCardInfo: CardInfoProps[] = [];
+    const newCardInfo: CardInfoProps[] = [];
     try {
       CardInfo.map((e) => {
-        if (e.scrap === true) {
-          newCardInfo.unshift(e);
-          console.log(newCardInfo);
+        if (scrapNum[0].scrapArray.includes(e.postIdx)) {
+          newScrapCardInfo.push(e);
         } else {
           newCardInfo.push(e);
-          console.log(newCardInfo);
         }
       });
+      newScrapCardInfo.push(...newCardInfo);
+      setCardList([...newScrapCardInfo]);
     } catch (error) {
       console.log(error);
     }
@@ -92,13 +95,13 @@ function Page() {
     const fetchData = async () => {
       try {
         await newCardInfoPush();
-        console.log("complete");
+        console.log(CardList);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, []);
+  }, [scrapNum]);
   return (
     <>
       <PageWrapper>
@@ -111,35 +114,18 @@ function Page() {
               <div className="px-2 text-[#FF0000]">{count}</div>건
             </div>
             <div className="flex justify-start items-center flex-wrap">
-              {CardInfo.map((e) => {
-                if (e.scrap === true) {
-                  return (
-                    <Card
-                      key={e.postIdx}
-                      postIdx={e.postIdx}
-                      userIdx={e.userIdx}
-                      title={e.title}
-                      secondaryText={e.secondaryText}
-                      scrap={e.scrap}
-                      imgsrc={e.imgsrc}
-                    />
-                  );
-                }
-              })}
-              {CardInfo.map((e) => {
-                if (e.scrap === false) {
-                  return (
-                    <Card
-                      key={e.postIdx}
-                      postIdx={e.postIdx}
-                      userIdx={e.userIdx}
-                      title={e.title}
-                      secondaryText={e.secondaryText}
-                      scrap={e.scrap}
-                      imgsrc={e.imgsrc}
-                    />
-                  );
-                }
+              {CardList.map((e) => {
+                return (
+                  <Card
+                    key={e.postIdx}
+                    postIdx={e.postIdx}
+                    userIdx={e.userIdx}
+                    title={e.title}
+                    secondaryText={e.secondaryText}
+                    scrap={scrapNum[0].scrapArray}
+                    imgsrc={e.imgsrc}
+                  />
+                );
               })}
             </div>
             <Link href="/">맨 처음으로</Link>
