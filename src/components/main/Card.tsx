@@ -95,7 +95,7 @@ const Card = ({
             src={imgsrc}
             alt="강아지"
             fill
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "cover" }}
           />
         </CardImage>
         <CardText>{title}</CardText>
@@ -125,7 +125,7 @@ const Card = ({
             src={imgsrc}
             alt="강아지"
             fill
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "cover" }}
           />
         </CardImage>
         <CardText>{title}</CardText>

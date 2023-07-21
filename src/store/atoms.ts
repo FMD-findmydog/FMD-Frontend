@@ -26,7 +26,7 @@ export interface UserScrapProps {
   scrapArray: Array<number>;
 }
 
-//이런식으로 스크랩을 구분해보자!
+//이런식으로 스크랩을 구분해보자! 여기에 위치도 추가..? 이게 가능할지는 몰루
 export const UserScrap = atom<UserScrapProps[]>({
   key: "userScrap",
   default: [{ userIdx: 1, scrapArray: [] }],

@@ -107,7 +107,7 @@ function Page() {
       <PageWrapper>
         <MainPageContainer>
           <Toggle />
-          <Title />
+          <Title page={"main"} />
           <div className="px-5">
             <div className="flex">
               오늘 들어온 실종신고
