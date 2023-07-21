@@ -31,3 +31,9 @@ export const UserScrap = atom<UserScrapProps[]>({
   key: "userScrap",
   default: [{ userIdx: 1, scrapArray: [] }],
 });
+
+//장소를 담아둘 임의의 저장소
+export const RegisterLocationAtom = atom<string>({
+  key: "registerLocation",
+  default: "",
+});

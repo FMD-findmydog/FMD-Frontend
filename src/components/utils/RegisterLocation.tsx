@@ -1,4 +1,6 @@
+import { RegisterLocationAtom } from "@/store/atoms";
 import React, { useState } from "react";
+import { useSetRecoilState } from "recoil";
 import tw, { css, styled } from "twin.macro";
 
 const LocationInput = styled.input(() => [
@@ -11,9 +13,13 @@ const LocationInput = styled.input(() => [
 ]);
 
 const RegisterLocation = () => {
-  const [text, setText] = useState("");
+  const [text, setText] = useState<string>("");
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
+  };
+  const locationAtom = useSetRecoilState(RegisterLocationAtom);
+  const onClick = (location: string) => {
+    locationAtom(location);
   };
   return (
     <div className="flex items-center justify-between">
@@ -24,7 +30,14 @@ const RegisterLocation = () => {
         type="text"
         placeholder="장소를 적어주세요"
       />
-      <button className="border-2 rounded border-solid">확인</button>
+      <button
+        className="border-2 rounded border-solid"
+        onClick={() => {
+          onClick(text);
+        }}
+      >
+        확인
+      </button>
     </div>
   );
 };
