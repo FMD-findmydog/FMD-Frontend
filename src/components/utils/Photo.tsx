@@ -1,7 +1,9 @@
 import Image from "next/image";
 import React, { useState } from "react";
+import tw, { css, styled } from "twin.macro";
 
 const Photo = () => {
+  const [index, setIndex] = useState<number>(0);
   //이거는 나중에 인터페이스로 만들예정!
   const [uploadImages, setUploadImages] = useState<{
     imageFiles: File[];
@@ -32,22 +34,27 @@ const Photo = () => {
       imageUrls: uploadImages.imageUrls.filter((_, index) => index !== id),
     });
   };
+  const onClick = (id: number) => {
+    setIndex(id);
+  };
   return (
     <div>
-      <div>
+      <MainImageWrapper>
         {uploadImages.imageUrls.length === 0 ? (
           <div>대표이미지삽입</div>
         ) : (
-          <div key={0}>
-            <Image
-              src={uploadImages.imageUrls[0]}
-              height={160}
-              width={160}
-              alt="대표이미지"
-            />
-          </div>
+          <MainImg>
+            <div key={0}>
+              <Image
+                src={uploadImages.imageUrls[index]}
+                fill
+                style={{ objectFit: "cover" }}
+                alt="대표이미지"
+              />
+            </div>
+          </MainImg>
         )}
-      </div>
+      </MainImageWrapper>
       <input
         type="file"
         id="inputFile"
@@ -55,12 +62,24 @@ const Photo = () => {
         multiple
         onChange={handleImageChange}
       />
-      <div className="flex">
+      <ImageDivWrapper>
         {uploadImages.imageUrls.map((url, idx) => (
           <>
-            <div key={idx}>
-              <Image src={url} width={80} height={80} alt={`${url} - ${idx}`} />
-            </div>
+            <ImageWrapper>
+              <MainImg>
+                <div key={idx}>
+                  <Image
+                    src={url}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    alt={`${url} - ${idx}`}
+                    onClick={() => {
+                      onClick(idx);
+                    }}
+                  />
+                </div>
+              </MainImg>
+            </ImageWrapper>
             <button
               onClick={() => {
                 handleDeleteImage(idx);
@@ -70,9 +89,42 @@ const Photo = () => {
             </button>
           </>
         ))}
-      </div>
+      </ImageDivWrapper>
     </div>
   );
 };
 
 export default Photo;
+
+const MainImageWrapper = styled.div(() => [
+  tw`my-3`,
+  css`
+    position: relative;
+    height: 40%;
+  `,
+]);
+
+const MainImg = styled.div(() => [
+  tw`w-full h-full`,
+  css`
+    box-sizing: content-box;
+    position: relative;
+  `,
+]);
+
+const ImageDivWrapper = styled.div(() => [
+  tw`flex items-center`,
+  css`
+    height: 30%;
+    position: relative;
+  `,
+]);
+
+const ImageWrapper = styled.div(() => [
+  css`
+    width: 25%;
+    height: 80%;
+    box-sizing: content-box;
+    position: relative;
+  `,
+]);

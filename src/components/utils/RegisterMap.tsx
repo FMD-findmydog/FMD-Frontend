@@ -8,8 +8,14 @@ declare global {
   }
 }
 
+interface MapSpot {
+  lat: number;
+  lon: number;
+}
+
 const RegisterMap = () => {
   const getUserLocation = useRecoilValue(RegisterLocationAtom);
+  const [missingSpot, setMissingSpot] = useState<MapSpot>();
   useEffect(() => {
     const mapScript = document.createElement("script");
 
@@ -36,6 +42,7 @@ const RegisterMap = () => {
                   result[0].y,
                   result[0].x
                 );
+                setMissingSpot({ lat: result[0].y, lon: result[0].x });
                 const marker = new window.kakao.maps.Marker({
                   map: map,
                   position: coords,
@@ -48,12 +55,16 @@ const RegisterMap = () => {
 
                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                 map.setCenter(coords);
+              } else {
+                setMissingSpot({ lat: 0, lon: 0 });
               }
             }
           );
         }
       });
     };
+    //잘 찍히는지 확인, 확인한 결과 잘 뜬다!
+    console.log(missingSpot);
     mapScript.addEventListener("load", onLoadKaKaoMap);
   }, [getUserLocation]);
   return (
