@@ -1,5 +1,6 @@
 import LoginForm from "@/components/logincompo/LoginForm";
 import SocialLogin from "@/components/logincompo/SocialLogin";
+import Link from "next/link";
 import { css, styled } from "twin.macro";
 
 const Loginbox = styled.div([
@@ -25,7 +26,7 @@ export default function Login(){
       <SocialLogin />
       <div>
         <span className="text-xs">아직 회원이 아니신가요?</span>
-        <span className="text-xs"> 회원가입하기 </span>
+        <Link href={"/signup"} ><span className="text-xs font-semibold"> 회원가입하기</span> </Link>
       </div>
     </Loginbox>
   )
