@@ -81,16 +81,18 @@ export default function InfoRegisterCompo({setIsBtnActive}: ActiveButtonType){
           placeholder="ex) 사람에 대한 경계심여부"
           {...register('significant')}/>
         </FormProperty>
-        <button> 입력폼등록하기</button> 
         {/* 폼임력 테스트용 이후 삭제하기 */}
     </Form>
     </FormContainer>
   )
 }
+//infoRegisterCompo
 const FormContainer = styled.div([
   css`
-    width: 80vw;
-    height: 80vh;
+    @media screen and (max-width: 820px){
+      width: 80vw;
+      margin: 20px 0px;
+    }
   `
 ])
 const Form = styled.form([
