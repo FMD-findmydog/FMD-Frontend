@@ -2,12 +2,13 @@ import {  IEntity } from "@/pages/register/report";
 import { Fragment, useEffect, useState } from "react";
 import {useForm} from "react-hook-form";
 import { css, styled } from "twin.macro";
-export interface ActiveButtonType {
+export interface IRegisterProps {
+  phoneNumber : boolean;
   setIsBtnActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const ageRange = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
 const weightRange = ['0~3kg','3~5kg','5~10kg','10~15kg','15~20kg','20~25kg','25~30kg','30~40kg','40kg이상'];
-export default function InfoRegisterCompo({setIsBtnActive}: ActiveButtonType){
+export default function InfoRegisterCompo({setIsBtnActive, phoneNumber}: IRegisterProps){
   const {register, handleSubmit, watch,  formState: {errors}}=useForm<IEntity>();
   const watchAll = Object.values(watch());
   const onValid = (data:any) => {
@@ -82,6 +83,22 @@ export default function InfoRegisterCompo({setIsBtnActive}: ActiveButtonType){
           {...register('significant')}/>
         </FormProperty>
         {/* 폼임력 테스트용 이후 삭제하기 */}
+
+        {
+          phoneNumber === true
+          ?
+          <>
+          <h2 className="text-xl font-semibold mt-2"> 보호자 정보 
+            <span className="text-xs font-thin">   해당 정보는 사이트에 의해 수집되지 않습니다. 전단지 작성용으로만 사용됩니다.</span>
+          </h2>
+          <FormProperty>
+            <label> 보호자 연락처 </label>
+            <FormInput {...register('phone')} placeholder="000-0000-0000"/>
+          </FormProperty>
+          </>
+          :
+          null
+        }
     </Form>
     </FormContainer>
   )

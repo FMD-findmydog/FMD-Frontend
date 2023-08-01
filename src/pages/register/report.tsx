@@ -1,7 +1,6 @@
 import InfoRegisterCompo from "@/components/InfoRegisterCompo";
 import { Dispatch, SetStateAction, useState } from "react";
 import { css, styled } from "twin.macro";
-import { ActiveButtonType } from "@/components/InfoRegisterCompo";
 export interface IEntity { //실종개체정보
   name : string, 
   gender : number,      //암컷 : 0 , 수컷 1
@@ -16,10 +15,11 @@ export interface IEntity { //실종개체정보
   significant : string, //특이사항
   imgURL :string,
   address : string,
+  phone?: string,
 }
 export default function Report(){
   const MAX_IMAGE_NUM = 4;
-  //const [isLogin, setIsLogin] = useRecoilValue();로그인시 사용가능할수 있도록 이후 코드 수정하기
+  //const [isLogin, setIsLogin] = useRecoilValue();로그아웃 상태에서 페이지 접근시 -> 로그인 페이지로 이동
   const [isBtnActive, setIsBtnActive] = useState<boolean>(false);
   return (
     <ReportPage>
@@ -30,7 +30,7 @@ export default function Report(){
           <MapContainer>이곳에 카카오 맵 컴포넌트를 추가해 주세요</MapContainer>
         </div>
         <div>
-        <InfoRegisterCompo setIsBtnActive={setIsBtnActive}/>
+        <InfoRegisterCompo setIsBtnActive={setIsBtnActive} phoneNumber={false}/>
         <Button>등록 완료하기</Button>
         </div>
       </ReportInfo>
@@ -47,7 +47,7 @@ const ReportPage = styled.div([
     align-items: center;
   }
   `])
-const ReportInfo = styled.div([
+export const ReportInfo = styled.div([
   css`
     display: flex;
     flex-direction: row;
@@ -86,7 +86,7 @@ export const MapContainer = styled.div([
   `
 ])
 
-const Button = styled.button([
+export const Button = styled.button([
   css`
     width : 500px;
     height: 50px;
