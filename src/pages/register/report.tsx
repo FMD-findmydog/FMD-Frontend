@@ -47,9 +47,7 @@ export default function Report() {
           <InfoRegisterCompo
             setIsBtnActive={setIsBtnActive}
             isPaper={false}
-            isReport={true}
           />
-          <Button>등록 완료하기</Button>
         </div>
       </ReportInfo>
     </ReportPage>

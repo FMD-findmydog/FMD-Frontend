@@ -30,9 +30,7 @@ export default function PaperForm() {
           <InfoRegisterCompo
             setIsBtnActive={setIsBtnActive}
             isPaper={true}
-            isReport={false}
           />
-          <Button>전단지 만들기</Button>
         </div>
       </ReportInfo>
     </PaperPage>
