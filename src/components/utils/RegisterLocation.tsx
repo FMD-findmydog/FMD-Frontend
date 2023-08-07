@@ -1,6 +1,7 @@
-import { RegisterLocationAtom } from "@/store/atoms";
+import { IEntity } from "@/pages/register/report";
+import { EntityState, RegisterLocationAtom } from "@/store/atoms";
 import React, { useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import tw, { css, styled } from "twin.macro";
 
 const LocationInput = styled.input(() => [

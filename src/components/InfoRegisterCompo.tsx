@@ -1,35 +1,74 @@
-import {  IEntity } from "@/pages/register/report";
-import { Fragment, useEffect, useState } from "react";
+import { IEntity } from "@/pages/register/report";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
 import {useForm} from "react-hook-form";
-import { css, styled } from "twin.macro";
+import tw, { css, styled, TwStyle } from "twin.macro";
+import RegisterLocation from "./utils/RegisterLocation";
+import { EntityState } from "@/store/atoms";
+import { useRecoilState } from "recoil";
+import {useRouter} from 'next/router';
+import { palette } from "@/pages/register/style";
 export interface IRegisterProps {
-  phoneNumber : boolean;
+  isPaper: boolean
   setIsBtnActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const ageRange = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
 const weightRange = ['0~3kg','3~5kg','5~10kg','10~15kg','15~20kg','20~25kg','25~30kg','30~40kg','40kg이상'];
-export default function InfoRegisterCompo({setIsBtnActive, phoneNumber}: IRegisterProps){
-  const {register, handleSubmit, watch,  formState: {errors}}=useForm<IEntity>();
+
+export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterProps){
+  const [entity, setEntity] = useRecoilState<IEntity>(EntityState); //entity 정보 저장용
+  const {register, handleSubmit, watch,  formState}=useForm<IEntity>({mode:"onChange"});
   const watchAll = Object.values(watch());
-  const onValid = (data:any) => {
-    data.preventDefault();
-    console.log("새로들어온 레포트데이터",data.target.value);
+  const router= useRouter();
+  const onValid = (data:IEntity) => {
+    isPaper ? registPaper() : registReport() ;
   }
-  useEffect(()=> {
-    if(watchAll.every((v) => v)){
-      setIsBtnActive(true);
-    }else {
-      setIsBtnActive(false);
-    }
-  }, [watchAll]);
+  const registReport = () => { // 실종신고 페이지에서 버튼 누를시 실행
+
+  };
+  const registPaper = () => { //전단지 페이지에서 버튼 누를시 실행
+    setEntity({
+      ...entity, 
+      name: watch('name'),
+      gender : watch('gender'),      
+      neuterSurge : watch('neuterSurge'),
+      veriChip : watch('veriChip'),   
+      age: watch('age'),
+      weight: watch('weight'),
+      color : watch('color'),
+      date : watch('date'),
+      significant : watch('significant'),
+      phone: watch('phone'),
+      location : watch('location'),
+      //여기에 imgURL 추가하기
+    });
+    router.push({pathname : "/flyers"});
+  }
+  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const {value} = e.currentTarget;
+    const RegNotNum = /[^0-9]/g
+    const onlyNum = value.replace(RegNotNum, '');//숫자가 아닌경우 공백으로 치환
+    
+    let DataFormat;
+    let RegDateFormat;
+    
+  }
+  // useEffect(()=> {
+  //   if(watchAll.every((v) => v)){
+  //     setIsBtnActive(true);
+  //   }else {
+  //     setIsBtnActive(false);
+  //   }
+  // }, [watchAll]);
   return (
     <FormContainer>
-    <Form onSubmit={onValid}>
+    <Form onSubmit={handleSubmit((data) => {
+      try { onValid(data)} catch(e){console.log(e)}
+    })}>
       <h1 className="text-2xl font-bold">실종 개체 정보 등록</h1>
       <h2 className="text-xl font-semibold mt-2">개체 기본 정보</h2>
         <FormProperty>
           <label>이름</label>
-          <FormInput {...register('name', {required: true})}/>
+          <FormInput {...register('name', {required: true})} placeholder="실종개체의 이름을 입력하세요"/>
         </FormProperty>
         
         <FormProperty>
@@ -40,19 +79,19 @@ export default function InfoRegisterCompo({setIsBtnActive, phoneNumber}: IRegist
         
         <FormProperty>
           <label>중성화 여부</label>
-          <div><FormInput {...register('neuterSurge', {required: true})} type="radio" value="0" name="n-Surge"/><span>  X</span></div>
-          <div><FormInput {...register('neuterSurge', {required: true})} type="radio" value="1" name="n-Surge"/><span>  O</span></div>
+          <div><FormInput {...register('neuterSurge', {required: true})} type="radio" value="false" name="neuterSurge"/><span>  X</span></div>
+          <div><FormInput {...register('neuterSurge', {required: true})} type="radio" value="true" name="neuterSurge"/><span>  O</span></div>
         </FormProperty>
 
         <FormProperty>
           <label>인식칩 삽입 여부</label>
-          <div><FormInput {...register('veriChip', {required: true})} type="radio" value="0" name="chip"/><span>  X</span></div>
-          <div><FormInput {...register('veriChip', {required: true})} type="radio" value="1" name="chip"/><span>  O</span></div>
+          <div><FormInput {...register('veriChip', {required: true})} type="radio" value="false" name="veriChip"/><span>  X</span></div>
+          <div><FormInput {...register('veriChip', {required: true})} type="radio" value="true" name="veriChip"/><span>  O</span></div>
         </FormProperty>
         
         <FormProperty>
           <label>모색(털색상)</label>
-          <FormInput {...register('color', {required: true})} />
+          <FormInput {...register('color', {required: true})} placeholder="털색상을 입력하세요"/>
         </FormProperty>
 
         <FormProperty>
@@ -69,23 +108,37 @@ export default function InfoRegisterCompo({setIsBtnActive, phoneNumber}: IRegist
           </select>
         </FormProperty>
       
-      <h2 className="text-xl font-semibold">실종 정보</h2>
+        <h2 className="text-xl font-semibold">실종 정보</h2>
 
         <FormProperty>
           <label> 실종 날짜</label>
-          <FormInput {...register('date', {required: true})} placeholder="YYYY-MM-DD"/>
+          <FormInput {...register('date', {required: true})} placeholder="YYYY-MM-DD" onChange ={handleDateChange}/>
         </FormProperty>
-
+        {
+          isPaper === true
+          ?
+          <>
+          <FormProperty>
+            <label> 실종 장소 </label>
+            <FormInput {...register('location')} placeholder="시/동/구/근처"/>
+          </FormProperty>
+          </>
+          :
+          null
+        }
+        {
+          isPaper? null :<RegisterLocation />
+        }
+        
         <FormProperty>
           <label> 특이사항</label>
           <textarea 
           placeholder="ex) 사람에 대한 경계심여부"
           {...register('significant')}/>
         </FormProperty>
-        {/* 폼임력 테스트용 이후 삭제하기 */}
 
         {
-          phoneNumber === true
+            isPaper === true
           ?
           <>
           <h2 className="text-xl font-semibold mt-2"> 보호자 정보 
@@ -99,6 +152,11 @@ export default function InfoRegisterCompo({setIsBtnActive, phoneNumber}: IRegist
           :
           null
         }
+        <Button disabled={!formState.isValid} >
+          {
+            isPaper === true ? "전단지 만들기" : "등록하기"
+          }
+        </Button>
     </Form>
     </FormContainer>
   )
@@ -130,14 +188,41 @@ const FormProperty = styled.div([
     }
     >input, textarea{
       width: 20em;
-      border-bottom: 1.5px solid  #0276e3;
     }
-
+    >input, lable {
+      height: 45px;
+    }
+    >label {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+    }
   `
 ])
 
 const FormInput = styled.input([
   css`
-    border-bottom: 1.5px solid  #0276e3;
+    padding : 15px 20px;
+    border: 1.5px solid ${palette.lightgray};
+    outline: none;
+    border-radius: 4px;
+    :focus {
+      border: 1px solid ${palette.blue};
+    }
   `
 ])
+
+//버튼 활성화/비활성화색상바뀌도록
+const Button =  styled.button`
+    width : 500px;
+    height: 50px;
+    margin-top: 20px;
+    border-radius: 25px;
+    color: #fff;
+    background-color: ${props => props.disabled ? palette.gray : palette.blue };
+    @media screen and (max-width: 820px){
+      width: 80vw;
+    }
+`;
+

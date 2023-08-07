@@ -1,4 +1,5 @@
 import { CardInfoProps } from "@/pages/main";
+import { IEntity } from "@/pages/register/report";
 import { atom } from "recoil";
 
 export const openSidebar = atom<boolean>({
@@ -37,3 +38,32 @@ export const RegisterLocationAtom = atom<string>({
   key: "registerLocation",
   default: "",
 });
+
+//entity 저장
+export const EntityState = atom<IEntity>({
+  key:"entityInfo",
+  default: 
+  { //실종개체정보
+    name : "", 
+    gender : 0,      //암컷 : 0 , 수컷 1
+    neuterSurge : false, //중성화 O : 1, 중성화 X : 0
+    veriChip : false,    //인식칩 O : 0, 인식칩 X : 1
+    age: 0,
+    weight: "",
+    color : "",
+    date : "",
+    lon : "", 
+    lan : "",
+    significant : "", //특이사항
+    imgURL :"",
+    address : "",
+    phone : "",
+    location: "", //전단지 만들때 필요한 장소정보, DB 저장x, 카카오맵 x
+  }
+});
+
+//로그인여부
+export const isLoginState = atom<boolean>({
+  key: "isLogIn",
+  default: false,
+})
