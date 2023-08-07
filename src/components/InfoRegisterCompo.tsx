@@ -120,8 +120,7 @@ export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterPr
           
           <FormProperty>
             <label> 실종 장소 </label>
-            { isPaper ?  <FormInput {...register('location')} placeholder="시/동/구/근처"/> : <RegisterLocation report={isPaper} />}
-            
+            { isPaper ?  <FormInput {...register('location', {required : true})} placeholder="시/동/구/근처"/> : <RegisterLocation report={isPaper} />}
           </FormProperty>
           
         <FormProperty>
