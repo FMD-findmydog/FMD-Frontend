@@ -29,7 +29,10 @@ const Photo = ({ MAX_IMAGE_NUM }: { MAX_IMAGE_NUM: number }) => {
       imageFiles: [...uploadImages.imageFiles, ...fileArray],
       imageUrls: [...uploadImages.imageUrls, ...newImages],
     });
-    setPhotoProp(uploadImages.imageUrls);
+    setPhotoProp((prev) => ({
+      ...prev,
+      imgURLArray: uploadImages.imageUrls,
+    }));
     console.log(photoProp);
   };
   const handleDeleteImage = (id: number) => {
@@ -37,10 +40,17 @@ const Photo = ({ MAX_IMAGE_NUM }: { MAX_IMAGE_NUM: number }) => {
       imageFiles: uploadImages.imageFiles.filter((_, index) => index !== id),
       imageUrls: uploadImages.imageUrls.filter((_, index) => index !== id),
     });
-    setPhotoProp(uploadImages.imageUrls);
+    setPhotoProp((prev) => ({
+      ...prev,
+      imgURLArray: uploadImages.imageUrls,
+    }));
   };
   const onClick = (id: number) => {
     setIndex(id);
+    setPhotoProp((prev) => ({
+      ...prev,
+      imgURL: uploadImages.imageUrls[id],
+    }));
   };
 
   const fileInputRef = useRef<HTMLInputElement>(null);

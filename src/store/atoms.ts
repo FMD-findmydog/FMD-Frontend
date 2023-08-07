@@ -6,6 +6,10 @@ interface KeyPair<V> {
   [key: string]: V;
 }
 
+interface KeyPairs<V, U> {
+  [key: string]: V | U;
+}
+
 export const openSidebar = atom<boolean>({
   key: "openSidebar",
   default: false,
@@ -80,7 +84,10 @@ export const RegisterMapAtom = atom<KeyPair<number>>({
   },
 });
 
-export const photoAtom = atom<Array<string>>({
+export const photoAtom = atom<KeyPairs<Array<string>, string>>({
   key: "photoAtom",
-  default: [],
+  default: {
+    imgURLArray: [],
+    imgURL: "",
+  },
 });

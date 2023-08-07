@@ -3,9 +3,9 @@ import { ChangeEvent, Fragment, useEffect, useState } from "react";
 import {useForm} from "react-hook-form";
 import tw, { css, styled, TwStyle } from "twin.macro";
 import RegisterLocation from "./utils/RegisterLocation";
-import { EntityState } from "@/store/atoms";
-import { useRecoilState } from "recoil";
-import {useRouter} from 'next/router';
+import { EntityState, photoAtom } from "@/store/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { useRouter } from "next/router";
 import { palette } from "@/pages/register/style";
 export interface IRegisterProps {
   isPaper: boolean
@@ -16,7 +16,10 @@ const weightRange = ['0~3kg','3~5kg','5~10kg','10~15kg','15~20kg','20~25kg','25~
 
 export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterProps){
   const [entity, setEntity] = useRecoilState<IEntity>(EntityState); //entity 정보 저장용
-  const {register, handleSubmit, watch,  formState}=useForm<IEntity>({mode:"onChange"});
+  const { register, handleSubmit, watch, formState } = useForm<IEntity>({
+    mode: "onChange",
+  });
+  const mainphotoProp = useRecoilValue(photoAtom);
   const watchAll = Object.values(watch());
   const router= useRouter();
   const onValid = (data:IEntity) => {
@@ -27,18 +30,19 @@ export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterPr
   };
   const registPaper = () => { //전단지 페이지에서 버튼 누를시 실행
     setEntity({
-      ...entity, 
-      name: watch('name'),
-      gender : watch('gender'),      
-      neuterSurge : watch('neuterSurge'),
-      veriChip : watch('veriChip'),   
-      age: watch('age'),
-      weight: watch('weight'),
-      color : watch('color'),
-      date : watch('date'),
-      significant : watch('significant'),
-      phone: watch('phone'),
-      location : watch('location'),
+      ...entity,
+      name: watch("name"),
+      gender: watch("gender"),
+      neuterSurge: watch("neuterSurge"),
+      veriChip: watch("veriChip"),
+      age: watch("age"),
+      weight: watch("weight"),
+      color: watch("color"),
+      date: watch("date"),
+      significant: watch("significant"),
+      phone: watch("phone"),
+      location: watch("location"),
+      imgURL: mainphotoProp.imgURL as string,
       //여기에 imgURL 추가하기
     });
     router.push({pathname : "/flyers"});
