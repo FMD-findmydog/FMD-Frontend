@@ -9,5 +9,5 @@ const Hello = styled.div([
   `,
 ]);
 export default function Home() {
-  return <Hello> hello</Hello>;
+  return <Hello>hello</Hello>;
 }

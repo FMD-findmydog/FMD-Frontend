@@ -1,14 +1,24 @@
 import { css, styled } from "twin.macro";
-import { Button, ImgSelecter, MapContainer, ReportInfo } from "./report";
+import {
+  Button,
+  IEntity,
+  ImgSelecter,
+  MapContainer,
+  ReportInfo,
+} from "./report";
 import InfoRegisterCompo from "@/components/InfoRegisterCompo";
 import { useState } from "react";
-import Title from "@/components/utils/Title";
 import Photo from "@/components/utils/Photo";
+import Title from "@/components/utils/Title";
+import { useRecoilValue } from "recoil";
+import { EntityState, isLoginState } from "@/store/atoms";
 
 export default function PaperForm() {
   const MAX_IMAGE_NUM = 1;
   const [isBtnActive, setIsBtnActive] = useState<boolean>(false);
-  //const [isLogin, setIsLogin] = useRecoilValue();로그인시 사용가능할수 있도록 이후 코드 수정하기
+  const entity = useRecoilValue<IEntity>(EntityState);
+
+  console.log("isBtnActive", isBtnActive);
   return (
     <PaperPage>
       <Title page="register" />
@@ -19,7 +29,7 @@ export default function PaperForm() {
         <div>
           <InfoRegisterCompo
             setIsBtnActive={setIsBtnActive}
-            phoneNumber={true}
+            isPaper={true}
             isReport={false}
           />
           <Button>전단지 만들기</Button>

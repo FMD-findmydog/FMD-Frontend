@@ -23,7 +23,7 @@ export interface CardInfoProps {
 
 function Page() {
   const count = useRecoilValue(missingCount);
-  //지금은 테스트 용으로..
+  //지금은 테스트 용으로.. 위도 경도도 들어가있고...
   const CardInfo = [
     {
       userIdx: 1,

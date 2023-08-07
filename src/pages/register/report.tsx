@@ -4,13 +4,16 @@ import RegisterLocation from "@/components/utils/RegisterLocation";
 import RegisterMap from "@/components/utils/RegisterMap";
 import Title from "@/components/utils/Title";
 import { Dispatch, SetStateAction, useState } from "react";
-import { css, styled } from "twin.macro";
+import tw, { css, styled } from "twin.macro";
+import { RegisterFormWrapper, RegisterPageContainer } from "./style";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { EntityState, RegisterLocationAtom, isLoginState } from "@/store/atoms";
 export interface IEntity {
   //실종개체정보
   name: string;
   gender: number; //암컷 : 0 , 수컷 1
-  neuterSurge: number; //중성화 O : 1, 중성화 X : 0
-  veriChip: number; //인식칩 O : 0, 인식칩 X : 1
+  neuterSurge: boolean; //중성화 O : 1, 중성화 X : 0
+  veriChip: boolean; //인식칩 O : 0, 인식칩 X : 1
   age: number;
   weight: string;
   color: string;
@@ -18,14 +21,16 @@ export interface IEntity {
   lon: string;
   lan: string;
   significant: string; //특이사항
-  imgURL: string[];
+  imgURL: string;
   address: string;
-  phone?: string;
+  location?: string; //전단지 작성시 only
+  phone?: string; //전단지 작성시 only
 }
 export default function Report() {
   const MAX_IMAGE_NUM: number = 3;
-  //const [isLogin, setIsLogin] = useRecoilValue();로그아웃 상태에서 페이지 접근시 -> 로그인 페이지로 이동
-  const [isBtnActive, setIsBtnActive] = useState<boolean>(false);
+  const isLogIn = useRecoilValue(isLoginState); //로그아웃 상태에서 페이지 접근시 -> 로그인 페이지로 이동
+  const [isBtnActive, setIsBtnActive] = useState<boolean>(false); //모든 정보 입력시 버튼 활성화
+
   return (
     <ReportPage>
       <Title page="register" />
@@ -41,7 +46,7 @@ export default function Report() {
         <div>
           <InfoRegisterCompo
             setIsBtnActive={setIsBtnActive}
-            phoneNumber={false}
+            isPaper={false}
             isReport={true}
           />
           <Button>등록 완료하기</Button>

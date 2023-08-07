@@ -2,14 +2,23 @@ import { openSidebar } from "@/store/atoms";
 import { Caveat } from "next/font/google";
 import { useRecoilState } from "recoil";
 import Sidebar from "../main/Sidebar";
+import { useRouter } from "next/router";
 const caveat = Caveat({ subsets: ["latin"] });
 
 export default function Title({ page }: { page: string }) {
   const [open, setopen] = useRecoilState(openSidebar);
+  const router = useRouter();
   return (
     <div className={caveat.className}>
       <div className="flex items-center justify-between">
-        <span className="px-4 text-3xl">FMD</span>
+        <span
+          className="px-4 text-3xl"
+          onClick={() => {
+            router.push("/");
+          }}
+        >
+          FMD
+        </span>
         {page === "main" ? (
           <button
             onClick={() => {
