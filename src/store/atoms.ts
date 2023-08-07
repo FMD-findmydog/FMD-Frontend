@@ -1,6 +1,10 @@
 import { CardInfoProps } from "@/pages/main";
 import { atom } from "recoil";
 
+interface KeyPair<V> {
+  [key: string]: V;
+}
+
 export const openSidebar = atom<boolean>({
   key: "openSidebar",
   default: false,
@@ -36,4 +40,17 @@ export const UserScrap = atom<UserScrapProps[]>({
 export const RegisterLocationAtom = atom<string>({
   key: "registerLocation",
   default: "",
+});
+
+export const RegisterMapAtom = atom<KeyPair<number>>({
+  key: "registerMap",
+  default: {
+    lat: 0,
+    lon: 0,
+  },
+});
+
+export const photoAtom = atom<Array<string>>({
+  key: "photoAtom",
+  default: [],
 });

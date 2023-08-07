@@ -4,15 +4,21 @@ import { useSetRecoilState } from "recoil";
 import tw, { css, styled } from "twin.macro";
 
 const LocationInput = styled.input(() => [
-  tw`
-    border-solid border-2 rounded
-    `,
   css`
-    color: black;
+    border-bottom: 1.5px solid #0276e3;
   `,
 ]);
 
-const RegisterLocation = () => {
+const LocationButton = styled.button(() => [
+  tw`border-transparent w-2/5`,
+  css`
+    border-radius: 25px;
+    background-color: #0276e3;
+    color: #fff;
+  `,
+]);
+
+const RegisterLocation = ({ report }: { report: boolean }) => {
   const [text, setText] = useState<string>("");
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -22,23 +28,23 @@ const RegisterLocation = () => {
     locationAtom(location);
   };
   return (
-    <div className="flex items-center justify-between">
-      <div>실종 장소</div>
+    <>
       <LocationInput
         value={text}
         onChange={onChange}
         type="text"
         placeholder="장소를 적어주세요"
       />
-      <button
-        className="border-2 rounded border-solid"
-        onClick={() => {
-          onClick(text);
-        }}
-      >
-        확인
-      </button>
-    </div>
+      {report === true ? (
+        <LocationButton
+          onClick={() => {
+            onClick(text);
+          }}
+        >
+          확인
+        </LocationButton>
+      ) : null}
+    </>
   );
 };
 

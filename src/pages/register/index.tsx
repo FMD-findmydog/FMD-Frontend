@@ -12,9 +12,9 @@ const index = () => {
       <MainPageContainer>
         <Title page="register" />
         <RegisterPageContainer>
-          <Photo />
+          <Photo MAX_IMAGE_NUM={1} />
           <RegisterFormWrapper>
-            <RegisterLocation />
+            <RegisterLocation report={false} />
           </RegisterFormWrapper>
           <RegisterMap />
         </RegisterPageContainer>

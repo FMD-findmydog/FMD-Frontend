@@ -1,6 +1,6 @@
-import { RegisterLocationAtom } from "@/store/atoms";
+import { RegisterLocationAtom, RegisterMapAtom } from "@/store/atoms";
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 declare global {
   interface Window {
@@ -8,14 +8,9 @@ declare global {
   }
 }
 
-interface MapSpot {
-  lat: number;
-  lon: number;
-}
-
 const RegisterMap = () => {
   const getUserLocation = useRecoilValue(RegisterLocationAtom);
-  const [missingSpot, setMissingSpot] = useState<MapSpot>();
+  const [missingSpot, setMissingSpot] = useRecoilState(RegisterMapAtom);
   useEffect(() => {
     const mapScript = document.createElement("script");
 
@@ -69,7 +64,7 @@ const RegisterMap = () => {
   }, [getUserLocation]);
   return (
     <>
-      <div id="map" className=" w-5/6 h-5/6" />
+      <div id="map" className=" w-full h-full" />
     </>
   );
 };
