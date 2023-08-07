@@ -3,8 +3,8 @@ import { ChangeEvent, Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import tw, { css, styled, TwStyle } from "twin.macro";
 import RegisterLocation from "./utils/RegisterLocation";
-import { EntityState } from "@/store/atoms";
-import { useRecoilState } from "recoil";
+import { EntityState, photoAtom } from "@/store/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
 import { palette } from "@/pages/register/style";
 export interface IRegisterProps {
@@ -36,6 +36,7 @@ export default function InfoRegisterCompo({
   const { register, handleSubmit, watch, formState } = useForm<IEntity>({
     mode: "onChange",
   });
+  const mainphotoProp = useRecoilValue(photoAtom);
   const watchAll = Object.values(watch());
   const router = useRouter();
   const onValid = (data: IEntity) => {
@@ -59,6 +60,7 @@ export default function InfoRegisterCompo({
       significant: watch("significant"),
       phone: watch("phone"),
       location: watch("location"),
+      imgURL: mainphotoProp.imgURL as string,
       //여기에 imgURL 추가하기
     });
     router.push({ pathname: "/flyers" });
