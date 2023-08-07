@@ -43,7 +43,6 @@ export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterPr
       phone: watch("phone"),
       location: watch("location"),
       imgURL: mainphotoProp.imgURL as string,
-      //여기에 imgURL 추가하기
     });
     router.push({pathname : "/flyers"});
   }
@@ -118,26 +117,13 @@ export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterPr
           <label> 실종 날짜</label>
           <FormInput {...register('date', {required: true})} placeholder="YYYY-MM-DD" onChange ={handleDateChange}/>
         </FormProperty>
-        {
-          isPaper === true
-          ?
-          <>
+          
           <FormProperty>
             <label> 실종 장소 </label>
-            <FormInput {...register('location')} placeholder="시/동/구/근처"/>
+            { isPaper ?  <FormInput {...register('location')} placeholder="시/동/구/근처"/> : <RegisterLocation report={isPaper} />}
+            
           </FormProperty>
-          </>
-          :
-          null
-        }
-        {
-          isPaper
-          ?
-          null 
-          :
-          <RegisterLocation report={isPaper} />
-        }
-        
+          
         <FormProperty>
           <label> 특이사항</label>
           <textarea 
