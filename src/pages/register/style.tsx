@@ -16,5 +16,6 @@ export const RegisterFormWrapper = styled.div(() => [
 export const palette = {
   gray : '#c2c2c2',
   lightgray: '#dbdbdb',
-  blue : '#0276e3'
+  blue : '#0276e3',
+  red: 'rgb(244, 52, 52)',
 }

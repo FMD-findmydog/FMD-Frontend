@@ -13,11 +13,14 @@ export interface IRegisterProps {
 }
 const ageRange = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
 const weightRange = ['0~3kg','3~5kg','5~10kg','10~15kg','15~20kg','20~25kg','25~30kg','30~40kg','40kg이상'];
-
-export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterProps){
+const dateReg = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
+export default function InfoRegisterCompo(this: any, {setIsBtnActive, isPaper}: IRegisterProps){
   const [entity, setEntity] = useRecoilState<IEntity>(EntityState); //entity 정보 저장용
-  const { register, handleSubmit, watch, formState } = useForm<IEntity>({
+  const { register, handleSubmit, watch, formState, setValue } = useForm<IEntity>({
     mode: "onChange",
+    defaultValues:{
+      date: ""
+    }
   });
   const mainphotoProp = useRecoilValue(photoAtom);
   const watchAll = Object.values(watch());
@@ -44,16 +47,51 @@ export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterPr
       location: watch("location"),
       imgURL: mainphotoProp.imgURL as string,
     });
-    router.push({pathname : "/flyers"});
+    //모달창 여기서 열어서 확인
+
+    //router.push({pathname : "/flyers"}); //모달창 에서 전단지페이지로 넘어가는 함수에 적용
   }
-  const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleDateChange = (e : React.KeyboardEvent<HTMLInputElement>) => { //년원일 입력시 하이픈 자동입력
     const {value} = e.currentTarget;
-    const RegNotNum = /[^0-9]/g
-    const onlyNum = value.replace(RegNotNum, '');//숫자가 아닌경우 공백으로 치환
-    
-    let DataFormat;
-    let RegDateFormat;
-    
+    let newValue;
+    console.log(e.keyCode);
+    if(e.keyCode === 8 ){
+      setValue("date", value.slice(0,-1));
+      return ;
+    }
+    if(value.length===4){
+      newValue = value+"-";
+      setValue("date", newValue);
+    }
+    if(value.length === 7){
+      newValue = value+"-";
+      setValue("date", newValue);
+    }
+    //날짜가 특정 길이를 넘어가지 않도록
+    if(value.length > 10){
+      newValue = value.slice(0,10);
+      setValue("date", newValue);
+    }
+  }
+  const handlePhoneChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const {value} =e.currentTarget;
+    let newValue;
+    if(e.keyCode === 8 ){
+      setValue("phone", value.slice(0,-1));
+      return ;
+    }
+    if(value.length===3){
+      newValue = value + "-";
+      setValue("phone", newValue);
+    }
+    if(value.length === 8){
+      newValue = value + "-";
+      setValue("phone", newValue);
+    }
+    if(value.length > 13){
+      newValue = value.slice(0,13);
+      setValue("phone", newValue);
+    }
   }
   // useEffect(()=> {
   //   if(watchAll.every((v) => v)){
@@ -75,13 +113,13 @@ export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterPr
         </FormProperty>
         
         <FormProperty>
-          <label>성별</label>
+          <label>성별</label> 
           <div><FormInput {...register('gender', {required: true})} type="radio" value="0" name="gender"/><span>  암컷</span></div>
           <div><FormInput {...register('gender', {required: true})} type="radio" value="1" name="gender"/><span>  수컷</span></div>
         </FormProperty>
         
         <FormProperty>
-          <label>중성화 여부</label>
+          <label>중성화 여부</label> 
           <div><FormInput {...register('neuterSurge', {required: true})} type="radio" value="false" name="neuterSurge"/><span>  X</span></div>
           <div><FormInput {...register('neuterSurge', {required: true})} type="radio" value="true" name="neuterSurge"/><span>  O</span></div>
         </FormProperty>
@@ -114,8 +152,22 @@ export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterPr
         <h2 className="text-xl font-semibold">실종 정보</h2>
 
         <FormProperty>
-          <label> 실종 날짜</label>
-          <FormInput {...register('date', {required: true})} placeholder="YYYY-MM-DD" onChange ={handleDateChange}/>
+          <label> 실종 날짜 </label>
+          <div className="message">
+            <FormInput {...register('date', 
+            {
+              required: true,
+              pattern : {
+                value : dateReg,
+                message : "날짜는 YYYY-MM-DD 형식 이여야 합니다."
+              },
+              maxLength : {
+                value: 10,
+                message: "입력된 날짜가 형식에 맞는지 확인하세요"
+              },
+              })} placeholder="YYYY-MM-DD" onKeyUp={handleDateChange} />
+            <span className="error-message">{formState.errors.date?.message}</span>
+          </div>
         </FormProperty>
           
           <FormProperty>
@@ -139,7 +191,7 @@ export default function InfoRegisterCompo({setIsBtnActive, isPaper}: IRegisterPr
           </h2>
           <FormProperty>
             <label> 보호자 연락처 </label>
-            <FormInput {...register('phone')} placeholder="000-0000-0000"/>
+            <FormInput {...register('phone')} placeholder="000-0000-0000" onKeyUp={handlePhoneChange}/>
           </FormProperty>
           </>
           :
@@ -179,17 +231,27 @@ const FormProperty = styled.div([
     >* {
       width: 10em ;
     }
-    >input, textarea{
+    > input, textarea {
       width: 20em;
     }
     >input, lable {
       height: 45px;
+    }
+    .message {
+      width: 20em;
+      >input {
+        width: 20em;
+      }
     }
     >label {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
       align-items: center;
+    }
+    span.error-message {
+      color: ${palette.red};
+      font-size: small;
     }
   `
 ])
@@ -203,6 +265,7 @@ const FormInput = styled.input([
     :focus {
       border: 1px solid ${palette.blue};
     }
+
   `
 ])
 
