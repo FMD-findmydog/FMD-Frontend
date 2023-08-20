@@ -8,16 +8,17 @@ import { EntityState } from '@/store/atoms';
 
 export default function Flyers(){
     const entity = useRecoilValue(EntityState);
+    console.log("확인용");
     console.log("name:", entity.name, " gender:", entity.gender, " 중성화:", entity.neuterSurge, " 인식칩:", entity.veriChip);
     console.log("age:", entity.age, " weight:", entity.weight, " color:", entity.color, " date:", entity.date);
     console.log("significant:", entity.significant, " imgURL:", entity.imgURL, " location:", entity.location, " phone:", entity.phone)
     const dummy : dummyInfo = {
-        date: new Date('2023-7-24'), //entity.date
+        date: '2023-07-24', //entity.date
         img: "/assets/images/dog.png", //entity.imgURL
         name: "인절미", //entity.name
-        gender: 1, //0:남 1:여 //entity.gender
-        neuterSurge: 1, //0:중성화 안함 1:함 //entity.neuterSurge
-        verichip: 1, //0:인식칩 없음 1:있음 //entity.veriChip
+        gender: 1, //1:남 0:여 //entity.gender
+        neuterSurge: true, //0:중성화 안함 1:함 //entity.neuterSurge
+        veriChip: true, //1:인식칩 없음 0:있음 //entity.veriChip
         age: 5, //entity.age
         weight: 3.5, //entity.weight
         color: "베이지", //모색 //entity.color
@@ -55,19 +56,19 @@ export default function Flyers(){
                             <InfoDiv>
                                 <table>
                                     <tr>
-                                        <td className='head'>날짜</td><td className='text-blue-500 font-bold'>{dummy.date.getFullYear()}년 {dummy.date.getMonth()}월 {dummy.date.getDay()}일</td>
+                                        <td className='head'>날짜</td><td className='text-blue-500 font-bold'>{dummy.date}</td>
                                     </tr>
                                     <tr>
                                         <td className='head'>장소</td><td className='text-red-500 font-bold'>{dummy.location}</td>
                                     </tr>
                                     <tr>
-                                        <td className='head'>성별</td><td>{dummy.gender==0?"남아":"여아"}, {dummy.neuterSurge==0?"중성화 안함":"중성화 함"}</td>
+                                        <td className='head'>성별</td><td>{dummy.gender==1?"남아":"여아"}, {dummy.neuterSurge?"중성화 함":"중성화 안함"}</td>
                                     </tr>
                                     <tr>
                                         <td className='head'>모색</td><td>{dummy.color}</td>
                                     </tr>
                                     <tr>
-                                        <td className='head'>인식칩</td><td>{dummy.verichip==0?"인식칩 없음":"인식칩 있음"}</td>
+                                        <td className='head'>인식칩</td><td>{dummy.veriChip?"인식칩 없음":"인식칩 있음"}</td>
                                     </tr>
                                     <tr>
                                         <td className='head'>나이</td><td>{dummy.age}살</td>
@@ -100,12 +101,12 @@ export default function Flyers(){
 }
 
 interface dummyInfo {
-    date: Date;
+    date: string;
     img: string;
     name: string;
     gender: number;
-    neuterSurge: number;
-    verichip: number;
+    neuterSurge: boolean, //중성화 O : 1, 중성화 X : 0
+    veriChip: boolean, //인식칩 O : 0, 인식칩 X : 1
     color: string;
     age: number;
     weight: number;
