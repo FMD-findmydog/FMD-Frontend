@@ -1,11 +1,17 @@
 import Toggle from "@/components/main/Toggle";
 import Title from "@/components/utils/Title";
-import { MissingDogsCard, UserScrap, missingCount } from "@/store/atoms";
+import {
+  MissingDogsCard,
+  UserScrap,
+  chooseButton,
+  missingCount,
+} from "@/store/atoms";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { MainPageContainer, PageWrapper } from "./style";
 import Card from "@/components/main/Card";
+import { textCardInfo } from "@/store/textCard";
 
 //페이지 라우팅은 Link로 하기! <Link href="">이런식으로</Link>
 //fetch하는 방식!
@@ -24,59 +30,33 @@ export interface CardInfoProps {
 function Page() {
   const count = useRecoilValue(missingCount);
   //지금은 테스트 용으로..
-  const CardInfo = [
-    {
-      userIdx: 1,
-      postIdx: 1,
-      title: "이름",
-      secondaryText: "추가정보",
-      date: new Date(2022, 6, 24),
-      scrap: false,
-      imgsrc: "/testImg/image3.jpeg",
-    },
-    {
-      userIdx: 3,
-      postIdx: 2,
-      title: "만수",
-      secondaryText: "추가정보2",
-      date: new Date(2022, 0, 24),
-      scrap: true,
-      imgsrc: "/testImg/image2.jpeg",
-    },
-    {
-      userIdx: 4,
-      postIdx: 3,
-      title: "무강",
-      secondaryText: "추가정보3",
-      date: new Date(2022, 11, 24),
-      scrap: true,
-      imgsrc: "/testImg/image1.jpeg",
-    },
-    {
-      userIdx: 6,
-      postIdx: 4,
-      title: "달덩이",
-      secondaryText: "추가정보4",
-      date: new Date(2022, 7, 1),
-      scrap: false,
-      imgsrc: "/testImg/image2.jpeg",
-    },
-    {
-      userIdx: 5,
-      postIdx: 5,
-      title: "대롱이",
-      secondaryText: "추가정보5",
-      date: new Date(2022, 7, 21),
-      scrap: false,
-      imgsrc: "/testImg/image1.jpeg",
-    },
-  ];
+  const CardInfo = textCardInfo;
   const [CardList, setCardList] = useRecoilState(MissingDogsCard);
   const scrapNum = useRecoilValue(UserScrap);
+  const toggleInfo = useRecoilValue(chooseButton);
   const newCardInfoPush = async () => {
     const newScrapCardInfo: CardInfoProps[] = [];
     const newCardInfo: CardInfoProps[] = [];
     try {
+      CardInfo.sort((a, b) => a.postIdx - b.postIdx);
+      CardInfo.map((e) => {
+        if (scrapNum[0].scrapArray.includes(e.postIdx)) {
+          newScrapCardInfo.push(e);
+        } else {
+          newCardInfo.push(e);
+        }
+      });
+      newScrapCardInfo.push(...newCardInfo);
+      setCardList([...newScrapCardInfo]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const newWatchInfoPush = async () => {
+    const newScrapCardInfo: CardInfoProps[] = [];
+    const newCardInfo: CardInfoProps[] = [];
+    try {
+      CardInfo.sort((a, b) => b.findIdx - a.findIdx);
       CardInfo.map((e) => {
         if (scrapNum[0].scrapArray.includes(e.postIdx)) {
           newScrapCardInfo.push(e);
@@ -92,16 +72,27 @@ function Page() {
   };
 
   useEffect(() => {
+    toggleChange();
+  }, [scrapNum, toggleInfo]);
+
+  const toggleChange = useCallback(() => {
     const fetchData = async () => {
       try {
-        await newCardInfoPush();
-        console.log(CardList);
+        {
+          toggleInfo === "missing"
+            ? await newCardInfoPush()
+            : await newWatchInfoPush();
+        }
+        toggleInfo === "missing"
+          ? console.log("실종신고")
+          : console.log("목격신고");
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [scrapNum]);
+  }, [toggleInfo, scrapNum]);
+
   return (
     <>
       <PageWrapper>

@@ -11,7 +11,8 @@ export const missingCount = atom<number>({
   default: 0,
 });
 
-export const chooseButton = atom<String>({
+//토글에 따른 렌더링을 위한 저장소..
+export const chooseButton = atom<string>({
   key: "chooseButton",
   default: "missing",
 });
