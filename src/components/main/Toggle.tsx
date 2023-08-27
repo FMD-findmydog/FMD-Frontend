@@ -1,4 +1,5 @@
 import { chooseButton } from "@/store/atoms";
+import { keyframes } from "@emotion/react";
 import React from "react";
 import { useRecoilState } from "recoil";
 import tw, { css, styled } from "twin.macro";
@@ -14,6 +15,46 @@ const ToggleWrapper = styled.div(() => [
     margin-left: -110px;
   `,
 ]);
+
+const Button = styled.button(({ Type }: { Type: string }) => [
+  tw`text-white font-bold rounded-full`,
+  css`
+    width: 80px;
+    height: 30px;
+    transform: translateX(-80px);
+  `,
+  Type === "missing"
+    ? css`
+        animation: ${fadeOut} 2s;
+        animation-fill-mode: both;
+      `
+    : css`
+        animation: ${fadeIn} 2s;
+        animation-fill-mode: both;
+      `,
+]);
+
+const fadeIn = keyframes`
+  from {
+    background-color : yellow;
+    transform : translateX(80px);
+  }
+  to {
+    background-color : blue;
+    transform : translateX(0px);
+  }
+`;
+
+const fadeOut = keyframes`
+    from {
+    background-color : blue;
+    transform : translateX(-80px);
+  }
+  to {
+    background-color : yellow;
+    transform : translateX(0px);
+  }
+`;
 
 const WatchButton = styled.button(() => [
   tw`bg-yellow-400 text-white font-bold rounded-full`,
@@ -50,15 +91,23 @@ const Toggle = () => {
   return (
     <>
       <ToggleWrapper>
+        {/* <>
+          <Button Type={select}>
+            {select === "missing" ? <>실종신고</> : <>목격신고</>}
+          </Button>
+          <UnclickButton onClick={onClick}>
+            {select === "missing" ? <>목격신고</> : <>실종신고</>}
+          </UnclickButton>
+        </> */}
         {select === "missing" ? (
           <>
-            <MissingButton>목격신고</MissingButton>
-            <UnclickButton onClick={onClick}>실종신고</UnclickButton>
+            <UnclickButton onClick={onClick}>목격신고</UnclickButton>
+            <Button Type="missing">실종신고</Button>
           </>
         ) : (
           <>
-            <UnclickButton onClick={onClick}>목격신고</UnclickButton>
-            <WatchButton>실종신고</WatchButton>
+            <Button Type="watch">목격신고</Button>
+            <UnclickButton onClick={onClick}>실종신고</UnclickButton>
           </>
         )}
       </ToggleWrapper>
