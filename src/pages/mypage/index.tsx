@@ -8,6 +8,8 @@ import {
   MypageProfile,
 } from "./style";
 import Image from "next/image";
+import ScrapList from "@/components/mypage/scrapList";
+import FindMyPet from "@/components/mypage/findMyPet";
 
 const Mypage = () => {
   const [list, setList] = useState<string>("scrap");
@@ -49,7 +51,9 @@ const Mypage = () => {
           )}
           <TextRelateDiv Name={false}>로그아웃</TextRelateDiv>
         </MypageContainer>
-        <MypageContainer style={{ width: "70%" }}>콘텐츠</MypageContainer>
+        <MypageContainer style={{ width: "70%" }}>
+          {list === "scrap" ? <ScrapList /> : <FindMyPet />}
+        </MypageContainer>
       </MypageWrapper>
     </>
   );
