@@ -19,7 +19,6 @@ export const MypageContainer = styled.div(() => [
 ]);
 
 export const MypageProfile = styled.div`
-  border-radius: 100px;
   width: 50%;
   height: 120px;
   box-sizing: content-box;

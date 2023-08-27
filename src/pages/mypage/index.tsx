@@ -29,7 +29,7 @@ const Mypage = () => {
               src={"/image/Profile.png"}
               alt="프로필"
               fill
-              style={{ objectFit: "fill" }}
+              style={{ objectFit: "fill", borderRadius: "100px" }}
             />
           </MypageProfile>
           <TextRelateDiv Name>보호자 ㅇㅇㅇ님</TextRelateDiv>
