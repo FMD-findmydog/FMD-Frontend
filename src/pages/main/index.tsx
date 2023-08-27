@@ -71,10 +71,6 @@ function Page() {
     }
   };
 
-  useEffect(() => {
-    toggleChange();
-  }, [scrapNum, toggleInfo]);
-
   const toggleChange = useCallback(() => {
     const fetchData = async () => {
       try {
@@ -92,6 +88,10 @@ function Page() {
     };
     fetchData();
   }, [toggleInfo, scrapNum]);
+
+  useEffect(() => {
+    toggleChange();
+  }, [toggleChange]);
 
   return (
     <>
