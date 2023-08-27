@@ -1,4 +1,4 @@
-export const textCardInfo = [
+export const testCardInfo = [
   {
     userIdx: 1,
     postIdx: 1,

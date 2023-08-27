@@ -11,7 +11,7 @@ import React, { useCallback, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { MainPageContainer, PageWrapper } from "./style";
 import Card from "@/components/main/Card";
-import { textCardInfo } from "@/store/textCard";
+import { testCardInfo } from "@/store/testCard";
 
 //페이지 라우팅은 Link로 하기! <Link href="">이런식으로</Link>
 //fetch하는 방식!
@@ -30,7 +30,7 @@ export interface CardInfoProps {
 function Page() {
   const count = useRecoilValue(missingCount);
   //지금은 테스트 용으로..
-  const CardInfo = textCardInfo;
+  const CardInfo = testCardInfo;
   const [CardList, setCardList] = useRecoilState(MissingDogsCard);
   const scrapNum = useRecoilValue(UserScrap);
   const toggleInfo = useRecoilValue(chooseButton);
