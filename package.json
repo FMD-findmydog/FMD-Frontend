@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "next build": "next build"
+    "next build": "next build",
+    "deploy": "pm2 start ecosystem.config.js --env production"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
