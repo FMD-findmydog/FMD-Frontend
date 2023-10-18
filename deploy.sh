@@ -3,7 +3,7 @@ PROJECT_NAME=/home/ubuntu/FMD-Frontend
 
 echo "> 프론트엔드 프로젝트 디렉토리로 이동"
 
-cd $REPOSITORY/$PROJECT_NAME
+cd $PROJECT_NAME
 
 echo "> Git Pull 프론트엔드 프로젝트"
 
@@ -12,6 +12,8 @@ git pull
 cd build
 
 echo "> 프론트엔트 프로젝트 Build 시작"
+
+npm install
 
 npm run build
 
@@ -41,7 +43,5 @@ else
 fi
 
 echo "> 새 애플리케이션 배포"
-
-sudo npm install
 
 npm run start
