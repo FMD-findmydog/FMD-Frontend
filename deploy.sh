@@ -2,6 +2,6 @@ REPOSITORY=/home/ubuntu/deploy
 
 cd $REPOSITORY
 
-sudo npm install
+sudo yarn
 
-npm deploy
+yarn deploy
