@@ -1,7 +1,8 @@
+#!/bin/bash
 REPOSITORY=/home/ubuntu/deploy
 
 cd $REPOSITORY
 
-sudo yarn
+sudo /usr/bin/yarn
 
-yarn deploy
+sudo /usr/bin/pm2 start dist
