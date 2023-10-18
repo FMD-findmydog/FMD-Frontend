@@ -1,8 +1,7 @@
-#!/bin/bash
 REPOSITORY=/home/ubuntu/deploy
 
 cd $REPOSITORY
 
-sudo /usr/bin/yarn
+sudo ln -s /root/.nvm/versions/node/v18.18.2/bin/yarn /usr/bin/yarn
 
-sudo /usr/bin/pm2 start dist
+/usr/bin/yarn deploy
