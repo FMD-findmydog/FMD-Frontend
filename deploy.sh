@@ -42,6 +42,6 @@ fi
 
 echo "> 새 애플리케이션 배포"
 
-pm2 reload all
+sudo npm install
 
 npm run start
