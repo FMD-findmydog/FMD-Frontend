@@ -42,4 +42,4 @@ jobs:
           --application-name fmd-code-deploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name fmd-test-deploy
-          --s3-location bucket=ffmd-bucket,bundleType=zip
+          --s3-location bucket=ffmd-bucket,bundleType=zip,key=build.zip
