@@ -23,7 +23,7 @@ jobs:
         run: yarn build
         
       - name: zip create
-        run: zip -qq -r ./hoon-build.zip .
+        run: zip -qq -r ./build.zip .
         shell: bash
    
       - name: Configure AWS credentials 
@@ -35,7 +35,7 @@ jobs:
 
       - name: Upload to S3
         run: |
-          aws s3 cp --region ap-northeast-2 ./hoon-build.zip s3://{{AWS S3 bucket명}}/hoon-build.zip
+          aws s3 cp --region ap-northeast-2 ./build.zip s3://{{ffmd-bucket}}/build.zip
 
       - name: Code Deploy
         run: aws deploy create-deployment
